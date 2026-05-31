@@ -204,6 +204,7 @@
             align-items: center;
             border: 2px solid #111;
             box-shadow: inset 0 -3px 10px rgba(0, 0, 0, 0.8), 0 0 20px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
         }
 
         .vinyl-disc::before {
@@ -221,16 +222,6 @@
                     transparent 4px
                 );
             pointer-events: none;
-        }
-
-        .vinyl-center {
-            width: 50px;
-            height: 50px;
-            background: radial-gradient(circle at 40% 40%, #999, #333);
-            border-radius: 50%;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.9);
-            z-index: 10;
-            border: 2px solid #222;
         }
 
         .vinyl-cover {
@@ -304,6 +295,7 @@
             z-index: 100;
             filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.8));
             animation: float 3s ease-in-out infinite;
+            overflow: hidden;
         }
 
         .floating-vinyl.dragging {
@@ -334,15 +326,6 @@
             background-image: var(--disc-image);
             background-size: cover;
             background-position: center;
-        }
-
-        .floating-vinyl-center {
-            width: 35px;
-            height: 35px;
-            background: radial-gradient(circle at 40% 40%, #999, #333);
-            border-radius: 50%;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.8);
-            z-index: 10;
         }
 
         /* Controles */
@@ -501,7 +484,6 @@
                     <div class="turntable-plate" id="turntable">
                         <div class="vinyl-disc" id="vinyDisc">
                             <div class="vinyl-cover"></div>
-                            <div class="vinyl-center"></div>
                         </div>
                     </div>
                     
@@ -531,27 +513,33 @@
         const albums = [
             {
                 id: 1,
-                name: 'Man I Need',
+                name: 'This Music May Contain Hope',
+                artist: 'Raye',
                 size: 'medium',
                 cover: 'https://i.imgur.com/TCvjeJA.png',
                 disc: 'https://i.imgur.com/udPqNSz.png',
-                audioUrl: 'https://www.mediafire.com/file/54wdqv1s1laq6h5/Man_I_Need.mp3/file'
-            },
-            {
-                id: 2,
-                name: 'Nightingale Lane',
-                size: 'large',
-                cover: 'https://i.imgur.com/STxSUdH.jpeg',
-                disc: 'https://i.imgur.com/j0lv7Jl.png',
+                song: 'Nightingale Lane',
                 audioUrl: 'https://www.mediafire.com/file/rtdj4gsoszleaem/Nightingale_Lane..mp3/file'
             },
             {
+                id: 2,
+                name: 'The Romantic',
+                artist: 'Bruno Mars',
+                size: 'large',
+                cover: 'https://i.imgur.com/STxSUdH.jpeg',
+                disc: 'https://i.imgur.com/j0lv7Jl.png',
+                song: 'Risk It All',
+                audioUrl: 'https://www.mediafire.com/file/cvi2vjcnkw36afs/Risk_It_All.mp3/file'
+            },
+            {
                 id: 3,
-                name: 'Risk It All',
+                name: 'The Art of Loving',
+                artist: 'Olivia Dean',
                 size: 'small',
                 cover: 'https://i.imgur.com/4A6WSum.png',
                 disc: 'https://i.imgur.com/6fE8pKV.png',
-                audioUrl: 'https://www.mediafire.com/file/cvi2vjcnkw36afs/Risk_It_All.mp3/file'
+                song: 'Man I Need',
+                audioUrl: 'https://www.mediafire.com/file/54wdqv1s1laq6h5/Man_I_Need.mp3/file'
             }
         ];
 
@@ -582,7 +570,7 @@
                     <div class="album-package">
                         <img src="${album.cover}" alt="${album.name}" loading="lazy">
                     </div>
-                    <div class="album-label">${album.name}</div>
+                    <div class="album-label">${album.artist}</div>
                 `;
                 albumDiv.onclick = () => selectAlbum(album, albumDiv);
                 display.appendChild(albumDiv);
@@ -608,9 +596,7 @@
             floatingVinyl.className = 'floating-vinyl';
             floatingVinyl.style.setProperty('--disc-image', `url('${album.disc}')`);
             floatingVinyl.innerHTML = `
-                <div class="floating-vinyl-disc">
-                    <div class="floating-vinyl-center"></div>
-                </div>
+                <div class="floating-vinyl-disc"></div>
             `;
             document.body.appendChild(floatingVinyl);
 
@@ -795,25 +781,34 @@
                         }
                     }, 100);
 
-                    // Reproducir audio
-                    audioPlayer.src = currentAlbum.audioUrl;
-                    audioPlayer.crossOrigin = "anonymous";
-                    audioPlayer.play().catch(err => {
-                        updateInfo('⚠ Error al reproducir: ' + err.message, false, true);
-                        console.error('Error:', err);
-                        stopRecord();
-                    });
-                    isPlaying = true;
+                    // Crear blob URL para reproducción cross-origin
+                    fetch(currentAlbum.audioUrl)
+                        .then(response => response.blob())
+                        .then(blob => {
+                            const url = URL.createObjectURL(blob);
+                            audioPlayer.src = url;
+                            audioPlayer.play().then(() => {
+                                isPlaying = true;
+                                // Detectar fin
+                                audioPlayer.onended = stopRecord;
+                            }).catch(err => {
+                                console.error('Error:', err);
+                                updateInfo('⚠ Error al reproducir audio', false, true);
+                                stopRecord();
+                            });
+                        })
+                        .catch(err => {
+                            console.error('Error:', err);
+                            updateInfo('⚠ Error al cargar el audio', false, true);
+                            stopRecord();
+                        });
 
                     // Actualizar botones
                     playBtn.disabled = true;
                     stopBtn.disabled = false;
 
-                    updateInfo(`♫ Reproduciendo "${currentAlbum.name}"...`, true);
+                    updateInfo(`♫ Reproduciendo "${currentAlbum.song}" de ${currentAlbum.name}...`, true);
                     document.getElementById('shelfStatus').textContent = '♫ Tocando...';
-
-                    // Detectar fin
-                    audioPlayer.onended = stopRecord;
 
                 }, 300);
             }, 400);
@@ -860,7 +855,7 @@
         // ===== UTILIDADES =====
         function setupAudioPlayer() {
             audioPlayer.addEventListener('play', () => {
-                console.log('Reproduciendo:', currentAlbum?.name);
+                console.log('Reproduciendo:', currentAlbum?.song);
             });
         }
 
