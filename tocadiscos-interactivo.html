@@ -531,27 +531,27 @@
         const albums = [
             {
                 id: 1,
-                name: 'Álbum 1',
+                name: 'Man I Need',
                 size: 'medium',
                 cover: 'https://i.imgur.com/TCvjeJA.png',
                 disc: 'https://i.imgur.com/udPqNSz.png',
-                audioUrl: 'https://drive.google.com/uc?export=download&id=1BMwF4kxXfYaWfLB5NffGGVgHKqrUwZjV'
+                audioUrl: 'https://www.mediafire.com/file/54wdqv1s1laq6h5/Man_I_Need.mp3/file'
             },
             {
                 id: 2,
-                name: 'Álbum 2',
+                name: 'Nightingale Lane',
                 size: 'large',
-                cover: 'https://i.imgur.com/j0lv7Jl.png',
-                disc: 'https://i.imgur.com/4A6WSum.png',
-                audioUrl: 'https://drive.google.com/uc?export=download&id=1UGFtrGY75hQmMVtcXY-vYsi3IcervwTk'
+                cover: 'https://i.imgur.com/STxSUdH.jpeg',
+                disc: 'https://i.imgur.com/j0lv7Jl.png',
+                audioUrl: 'https://www.mediafire.com/file/rtdj4gsoszleaem/Nightingale_Lane..mp3/file'
             },
             {
                 id: 3,
-                name: 'Álbum 3',
+                name: 'Risk It All',
                 size: 'small',
-                cover: 'https://i.imgur.com/6fE8pKV.png',
-                disc: 'https://i.imgur.com/STxSUdH.jpeg',
-                audioUrl: 'https://drive.google.com/uc?export=download&id=17b24J45Do7fwJpQ42pvEqX_0-NeyN4b9'
+                cover: 'https://i.imgur.com/4A6WSum.png',
+                disc: 'https://i.imgur.com/6fE8pKV.png',
+                audioUrl: 'https://www.mediafire.com/file/cvi2vjcnkw36afs/Risk_It_All.mp3/file'
             }
         ];
 
@@ -797,8 +797,10 @@
 
                     // Reproducir audio
                     audioPlayer.src = currentAlbum.audioUrl;
+                    audioPlayer.crossOrigin = "anonymous";
                     audioPlayer.play().catch(err => {
-                        updateInfo('⚠ Error al reproducir audio: ' + err.message, false, true);
+                        updateInfo('⚠ Error al reproducir: ' + err.message, false, true);
+                        console.error('Error:', err);
                         stopRecord();
                     });
                     isPlaying = true;
