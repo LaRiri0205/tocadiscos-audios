@@ -24,97 +24,152 @@
 
         .main-container {
             display: flex;
-            gap: 40px;
+            gap: 60px;
             align-items: center;
             flex-wrap: wrap;
             justify-content: center;
-            max-width: 1200px;
+            max-width: 1400px;
         }
 
         /* ===== ESTANTERÍA DE ÁLBUMES ===== */
         .album-shelf {
             background: linear-gradient(135deg, #0f3460 0%, #16213e 100%);
-            padding: 30px;
+            padding: 40px;
             border-radius: 15px;
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
             border: 2px solid #e94560;
-            min-width: 350px;
+            min-width: 400px;
         }
 
         .shelf-title {
             color: #e94560;
             font-size: 24px;
             font-weight: bold;
-            margin-bottom: 30px;
+            margin-bottom: 40px;
             text-align: center;
             text-transform: uppercase;
             letter-spacing: 2px;
         }
 
-        .albums-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
+        .albums-display {
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            gap: 20px;
+            height: 400px;
         }
 
-        .album-cover {
-            width: 100%;
-            aspect-ratio: 1;
+        .album-item {
+            position: relative;
             cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .album-item:hover {
+            transform: translateY(-10px);
+        }
+
+        /* Empaque del álbum (cubierta) */
+        .album-package {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(0, 0, 0, 0.3) 100%);
+            border: 2px solid #e94560;
             border-radius: 8px;
+            padding: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+            position: relative;
             overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-            transition: all 0.3s ease;
-            border: 3px solid transparent;
         }
 
-        .album-cover:hover {
-            transform: scale(1.05);
-            box-shadow: 0 8px 25px rgba(233, 69, 96, 0.5);
-            border-color: #e94560;
-        }
-
-        .album-cover img {
+        .album-package img {
             width: 100%;
             height: 100%;
             object-fit: cover;
+            display: block;
+            border-radius: 4px;
+        }
+
+        /* Tamaños diferentes */
+        .album-item.size-small .album-package {
+            width: 120px;
+            height: 140px;
+        }
+
+        .album-item.size-medium .album-package {
+            width: 140px;
+            height: 160px;
+        }
+
+        .album-item.size-large .album-package {
+            width: 160px;
+            height: 180px;
+        }
+
+        .album-item.selected .album-package {
+            border-color: #4caf50;
+            box-shadow: 0 8px 25px rgba(76, 175, 80, 0.6);
+            transform: scale(1.05);
+        }
+
+        .album-label {
+            color: #e94560;
+            font-size: 12px;
+            text-align: center;
+            margin-top: 8px;
+            font-weight: bold;
         }
 
         /* ===== TOCADISCOS ===== */
         .turntable-section {
             background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
-            padding: 40px;
+            padding: 50px 40px;
             border-radius: 20px;
             box-shadow: 0 15px 50px rgba(0, 0, 0, 0.8);
             border: 3px solid #333;
-            min-width: 450px;
+            min-width: 500px;
             position: relative;
         }
 
-        .turntable-base {
-            background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%);
-            padding: 30px;
+        .turntable-title {
+            color: #e94560;
+            font-size: 18px;
+            text-align: center;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* Base física del tocadiscos */
+        .turntable-body {
+            background: linear-gradient(135deg, #3a3a3a 0%, #1a1a1a 100%);
+            border: 3px solid #555;
             border-radius: 15px;
-            box-shadow: inset 0 5px 15px rgba(0, 0, 0, 0.8);
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), inset 0 2px 5px rgba(255, 255, 255, 0.1);
+            position: relative;
         }
 
         .record-player {
             position: relative;
-            width: 300px;
-            height: 300px;
+            width: 350px;
+            height: 280px;
             margin: 0 auto 30px;
+            background: radial-gradient(circle at 50% 30%, #555, #1a1a1a);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: inset 0 5px 15px rgba(0, 0, 0, 0.8);
+            border: 2px solid #444;
         }
 
-        /* Plato del tocadiscos */
+        /* Plato giratorio */
         .turntable-plate {
             position: absolute;
             width: 280px;
             height: 280px;
-            top: 10px;
-            left: 10px;
-            background: radial-gradient(circle at 30% 30%, #4a4a4a, #0a0a0a);
+            top: 0;
+            left: 35px;
+            background: radial-gradient(circle at 30% 30%, #5a5a5a, #0a0a0a);
             border-radius: 50%;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.9), inset 0 -5px 15px rgba(0, 0, 0, 0.8);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.9), inset 0 -5px 20px rgba(0, 0, 0, 0.9);
             overflow: hidden;
             display: flex;
             justify-content: center;
@@ -126,7 +181,7 @@
         }
 
         .turntable-plate.spinning.fast {
-            animation: spin 1s linear infinite;
+            animation: spin 0.8s linear infinite;
         }
 
         @keyframes spin {
@@ -138,67 +193,112 @@
             }
         }
 
-        .disk-in-player {
-            width: 260px;
-            height: 260px;
+        .vinyl-disc {
+            width: 250px;
+            height: 250px;
             border-radius: 50%;
-            box-shadow: inset 0 -5px 15px rgba(0, 0, 0, 0.8);
-            background-size: cover;
-            background-position: center;
+            background: radial-gradient(circle at 40% 40%, #333, #000);
             position: relative;
             display: flex;
             justify-content: center;
             align-items: center;
-            border: 3px solid #222;
+            border: 2px solid #111;
+            box-shadow: inset 0 -3px 10px rgba(0, 0, 0, 0.8), 0 0 20px rgba(0, 0, 0, 0.5);
         }
 
-        .disk-center {
-            width: 40px;
-            height: 40px;
-            background: radial-gradient(circle at 30% 30%, #888, #222);
+        .vinyl-disc::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
             border-radius: 50%;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.8);
+            background: 
+                repeating-radial-gradient(
+                    circle at center,
+                    rgba(255, 255, 255, 0.02) 0px,
+                    rgba(255, 255, 255, 0.02) 2px,
+                    transparent 2px,
+                    transparent 4px
+                );
+            pointer-events: none;
+        }
+
+        .vinyl-center {
+            width: 50px;
+            height: 50px;
+            background: radial-gradient(circle at 40% 40%, #999, #333);
+            border-radius: 50%;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.9);
+            z-index: 10;
+            border: 2px solid #222;
+        }
+
+        .vinyl-cover {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background-size: cover;
+            background-position: center;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .vinyl-disc.with-cover .vinyl-cover {
+            opacity: 1;
         }
 
         /* Brazo del tocadiscos */
+        .tonearm-base {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #666, #333);
+            bottom: 20px;
+            right: 30px;
+            border-radius: 50%;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.8);
+            z-index: 20;
+        }
+
         .tonearm {
             position: absolute;
-            width: 20px;
-            height: 200px;
-            background: linear-gradient(135deg, #333, #111);
-            bottom: -50px;
-            right: -50px;
-            transform-origin: bottom right;
-            border-radius: 10px;
+            width: 16px;
+            height: 180px;
+            background: linear-gradient(135deg, #444, #222);
+            bottom: 50px;
+            right: 35px;
+            transform-origin: bottom center;
+            border-radius: 8px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.8);
-            transition: transform 0.6s ease;
-            z-index: 10;
+            transition: transform 0.5s ease;
+            z-index: 15;
         }
 
         .tonearm.in-rest {
-            transform: rotate(-45deg);
+            transform: rotate(35deg);
         }
 
         .tonearm.playing {
-            transform: rotate(0deg);
+            transform: rotate(-5deg);
         }
 
         .stylus {
             position: absolute;
-            width: 8px;
-            height: 30px;
+            width: 6px;
+            height: 25px;
             background: linear-gradient(to bottom, #ffcc00, #ff9900);
-            bottom: -20px;
-            right: 6px;
-            border-radius: 4px;
+            bottom: -15px;
+            left: 5px;
+            border-radius: 3px;
             box-shadow: 0 2px 8px rgba(255, 200, 0, 0.6);
         }
 
-        /* Floración del disco */
-        .floating-disk {
+        /* Vinilo flotante animado */
+        .floating-vinyl {
             position: fixed;
-            width: 200px;
-            height: 200px;
+            width: 180px;
+            height: 180px;
             border-radius: 50%;
             cursor: grab;
             z-index: 100;
@@ -206,7 +306,7 @@
             animation: float 3s ease-in-out infinite;
         }
 
-        .floating-disk.dragging {
+        .floating-vinyl.dragging {
             animation: none;
             cursor: grabbing;
         }
@@ -216,18 +316,33 @@
                 transform: translateY(0px) rotateZ(0deg);
             }
             50% {
-                transform: translateY(-20px) rotateZ(10deg);
+                transform: translateY(-25px) rotateZ(15deg);
             }
         }
 
-        .floating-disk-img {
+        .floating-vinyl-disc {
             width: 100%;
             height: 100%;
             border-radius: 50%;
+            background: radial-gradient(circle at 40% 40%, #333, #000);
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 3px solid #222;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.8);
+            background-image: var(--disc-image);
             background-size: cover;
             background-position: center;
-            border: 4px solid #e94560;
-            box-shadow: 0 5px 20px rgba(233, 69, 96, 0.6);
+        }
+
+        .floating-vinyl-center {
+            width: 35px;
+            height: 35px;
+            background: radial-gradient(circle at 40% 40%, #999, #333);
+            border-radius: 50%;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.8);
+            z-index: 10;
         }
 
         /* Controles */
@@ -235,7 +350,7 @@
             display: flex;
             gap: 15px;
             justify-content: center;
-            margin-bottom: 20px;
+            margin-top: 25px;
             flex-wrap: wrap;
         }
 
@@ -290,11 +405,12 @@
             border-radius: 8px;
             color: #e94560;
             text-align: center;
-            font-size: 14px;
-            min-height: 60px;
+            font-size: 13px;
+            min-height: 50px;
             display: flex;
             align-items: center;
             justify-content: center;
+            flex-wrap: wrap;
         }
 
         .info-box.success {
@@ -303,24 +419,75 @@
             color: #4caf50;
         }
 
+        .info-box.warning {
+            background: rgba(255, 193, 7, 0.1);
+            border-color: #ffc107;
+            color: #ffc107;
+        }
+
         /* Audio player oculto */
         audio {
             display: none;
+        }
+
+        /* Instrucciones */
+        .instructions {
+            background: rgba(255, 193, 7, 0.1);
+            border: 2px solid #ffc107;
+            padding: 15px;
+            border-radius: 8px;
+            color: #ffc107;
+            font-size: 12px;
+            margin-top: 20px;
+            line-height: 1.6;
+        }
+
+        .instructions-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .code-block {
+            background: rgba(0, 0, 0, 0.3);
+            border-left: 3px solid #ffc107;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 11px;
+            overflow-x: auto;
+            color: #4caf50;
         }
 
         /* Responsive */
         @media (max-width: 1024px) {
             .main-container {
                 flex-direction: column;
-                gap: 20px;
+                gap: 30px;
             }
 
             .turntable-section {
-                min-width: 350px;
+                min-width: auto;
             }
 
             .album-shelf {
-                min-width: 300px;
+                min-width: auto;
+            }
+
+            .record-player {
+                width: 300px;
+                height: 240px;
+            }
+
+            .turntable-plate {
+                width: 230px;
+                height: 230px;
+                left: 35px;
+            }
+
+            .vinyl-disc {
+                width: 200px;
+                height: 200px;
             }
         }
 
@@ -331,36 +498,17 @@
 
             .turntable-section {
                 padding: 20px;
-                min-width: auto;
             }
 
             .record-player {
-                width: 250px;
-                height: 250px;
+                width: 280px;
+                height: 220px;
             }
 
-            .turntable-plate {
-                width: 230px;
-                height: 230px;
-                top: 10px;
-                left: 10px;
+            .albums-display {
+                height: 320px;
+                gap: 10px;
             }
-
-            .disk-in-player {
-                width: 210px;
-                height: 210px;
-            }
-
-            .albums-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
-        .status-message {
-            color: #ffcc00;
-            font-size: 12px;
-            margin-top: 10px;
-            text-align: center;
         }
     </style>
 </head>
@@ -368,23 +516,28 @@
     <div class="main-container">
         <!-- ESTANTERÍA DE ÁLBUMES -->
         <div class="album-shelf">
-            <div class="shelf-title">Mis Álbumes</div>
-            <div class="albums-grid" id="albumsGrid"></div>
-            <div class="status-message" id="shelfStatus">Selecciona un álbum para comenzar</div>
+            <div class="shelf-title">Mi Colección</div>
+            <div class="albums-display" id="albumsDisplay"></div>
+            <div class="status-message" id="shelfStatus">👆 Selecciona un vinilo</div>
         </div>
 
         <!-- TOCADISCOS -->
         <div class="turntable-section">
-            <div class="turntable-base">
+            <div class="turntable-title">Tocadiscos</div>
+            
+            <div class="turntable-body">
                 <div class="record-player">
                     <div class="turntable-plate" id="turntable">
-                        <div class="disk-in-player" id="diskInPlayer">
-                            <div class="disk-center"></div>
+                        <div class="vinyl-disc" id="vinyDisc">
+                            <div class="vinyl-cover"></div>
+                            <div class="vinyl-center"></div>
                         </div>
                     </div>
+                    
                     <div class="tonearm in-rest" id="tonearm">
                         <div class="stylus"></div>
                     </div>
+                    <div class="tonearm-base"></div>
                 </div>
 
                 <div class="controls">
@@ -393,13 +546,31 @@
                 </div>
 
                 <div class="info-box" id="infoBox">
-                    👆 Selecciona un álbum de la estantería
+                    👆 Selecciona un vinilo de la colección
+                </div>
+
+                <div class="instructions">
+                    <div class="instructions-title">📝 Cómo agregar audios:</div>
+                    
+                    1. Abre este archivo en un editor de texto<br>
+                    2. Busca la sección "// ===== CONFIGURACIÓN DE ÁLBUMES =====" (línea ~200)<br>
+                    3. En cada álbum, reemplaza el valor de "audioUrl" con:<br>
+                    
+                    <div class="code-block">
+// Opción A: URL online<br>
+audioUrl: 'https://ejemplo.com/mi-cancion.mp3'<br>
+<br>
+// Opción B: Archivo local (sube a GitHub)<br>
+// Crea carpeta 'audios' en tu repo<br>
+// Sube archivos .mp3 ahí<br>
+// Luego usa: 'audios/cancion.mp3'
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Audio Player -->
+    <!-- Audio player -->
     <audio id="audioPlayer"></audio>
 
     <script>
@@ -408,44 +579,32 @@
             {
                 id: 1,
                 name: 'Álbum 1',
-                cover: 'https://i.imgur.com/TCvjeJA.png',
-                audio: '' // ← AGREGA LA URL DEL AUDIO AQUÍ
+                size: 'medium',
+                cover: 'https://i.imgur.com/TCvjeJA.png',    // Portada del empaque
+                disc: 'https://i.imgur.com/udPqNSz.png',     // Imagen del vinilo
+                audioUrl: ''  // ← AQUÍ VA TU AUDIO
             },
             {
                 id: 2,
                 name: 'Álbum 2',
-                cover: 'https://i.imgur.com/j0lv7Jl.png',
-                audio: '' // ← AGREGA LA URL DEL AUDIO AQUÍ
+                size: 'large',
+                cover: 'https://i.imgur.com/j0lv7Jl.png',    // Portada del empaque
+                disc: 'https://i.imgur.com/4A6WSum.png',     // Imagen del vinilo
+                audioUrl: ''  // ← AQUÍ VA TU AUDIO
             },
             {
                 id: 3,
                 name: 'Álbum 3',
-                cover: 'https://i.imgur.com/6fE8pKV.png',
-                audio: '' // ← AGREGA LA URL DEL AUDIO AQUÍ
-            },
-            {
-                id: 4,
-                name: 'Álbum 4',
-                cover: 'https://i.imgur.com/udPqNSz.png',
-                audio: '' // ← AGREGA LA URL DEL AUDIO AQUÍ
-            },
-            {
-                id: 5,
-                name: 'Álbum 5',
-                cover: 'https://i.imgur.com/4A6WSum.png',
-                audio: '' // ← AGREGA LA URL DEL AUDIO AQUÍ
-            },
-            {
-                id: 6,
-                name: 'Álbum 6',
-                cover: 'https://i.imgur.com/STxSUdH.jpeg',
-                audio: '' // ← AGREGA LA URL DEL AUDIO AQUÍ
+                size: 'small',
+                cover: 'https://i.imgur.com/6fE8pKV.png',    // Portada del empaque
+                disc: 'https://i.imgur.com/STxSUdH.jpeg',    // Imagen del vinilo
+                audioUrl: ''  // ← AQUÍ VA TU AUDIO
             }
         ];
 
         // ===== VARIABLES DE ESTADO =====
         let currentAlbum = null;
-        let floatingDisk = null;
+        let floatingVinyl = null;
         let isDragging = false;
         let dragOffset = { x: 0, y: 0 };
         let isPlaying = false;
@@ -459,56 +618,77 @@
 
         // ===== RENDERIZAR ÁLBUMES EN LA ESTANTERÍA =====
         function renderAlbums() {
-            const grid = document.getElementById('albumsGrid');
-            grid.innerHTML = '';
+            const display = document.getElementById('albumsDisplay');
+            display.innerHTML = '';
 
-            albums.forEach((album, index) => {
+            albums.forEach((album) => {
                 const albumDiv = document.createElement('div');
-                albumDiv.className = 'album-cover';
-                albumDiv.innerHTML = `<img src="${album.cover}" alt="${album.name}" loading="lazy">`;
+                albumDiv.className = `album-item size-${album.size}`;
+                albumDiv.id = `album-${album.id}`;
+                albumDiv.innerHTML = `
+                    <div class="album-package">
+                        <img src="${album.cover}" alt="${album.name}" loading="lazy">
+                    </div>
+                    <div class="album-label">${album.name}</div>
+                `;
                 albumDiv.onclick = () => selectAlbum(album, albumDiv);
-                grid.appendChild(albumDiv);
+                display.appendChild(albumDiv);
             });
         }
 
-        // ===== SELECCIONAR ÁLBUM (HACER FLOTAR) =====
+        // ===== SELECCIONAR ÁLBUM (SACAR DE LA ESTANTERÍA) =====
         function selectAlbum(album, element) {
-            if (!floatingDisk) {
-                // Crear disco flotante
-                floatingDisk = document.createElement('div');
-                floatingDisk.className = 'floating-disk';
-                floatingDisk.innerHTML = `<div class="floating-disk-img" style="background-image: url('${album.cover}')"></div>`;
-                document.body.appendChild(floatingDisk);
-
-                // Posicionar en el centro de la pantalla
-                const rect = element.getBoundingClientRect();
-                floatingDisk.style.left = rect.left + 'px';
-                floatingDisk.style.top = rect.top + 'px';
-
-                // Animar al centro
-                setTimeout(() => {
-                    floatingDisk.style.transition = 'all 0.6s ease';
-                    floatingDisk.style.left = window.innerWidth / 2 - 100 + 'px';
-                    floatingDisk.style.top = window.innerHeight / 2 - 100 + 'px';
-                }, 10);
-
-                // Hacer draggable
-                floatingDisk.addEventListener('mousedown', startDrag);
-                floatingDisk.addEventListener('touchstart', startDrag);
-
-                currentAlbum = album;
-                updateInfo(`"${album.name}" flotando. Arrastra al tocadiscos para colocarlo.`);
-                document.getElementById('shelfStatus').textContent = '✓ Disco flotando...';
+            // Remover selección anterior
+            document.querySelectorAll('.album-item').forEach(el => {
+                el.classList.remove('selected');
+            });
+            
+            if (floatingVinyl) {
+                floatingVinyl.remove();
+                floatingVinyl = null;
             }
+
+            element.classList.add('selected');
+
+            // Crear vinilo flotante
+            floatingVinyl = document.createElement('div');
+            floatingVinyl.className = 'floating-vinyl';
+            floatingVinyl.style.setProperty('--disc-image', `url('${album.disc}')`);
+            floatingVinyl.innerHTML = `
+                <div class="floating-vinyl-disc">
+                    <div class="floating-vinyl-center"></div>
+                </div>
+            `;
+            document.body.appendChild(floatingVinyl);
+
+            // Posicionar en el elemento
+            const rect = element.getBoundingClientRect();
+            floatingVinyl.style.left = rect.left + rect.width / 2 - 90 + 'px';
+            floatingVinyl.style.top = rect.top + 'px';
+
+            // Animar hacia el centro
+            setTimeout(() => {
+                floatingVinyl.style.transition = 'all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1)';
+                floatingVinyl.style.left = window.innerWidth / 2 - 90 + 'px';
+                floatingVinyl.style.top = window.innerHeight / 2 - 90 + 'px';
+            }, 10);
+
+            // Hacer draggable
+            floatingVinyl.addEventListener('mousedown', startDrag);
+            floatingVinyl.addEventListener('touchstart', startDrag);
+
+            currentAlbum = album;
+            updateInfo(`"${album.name}" flotando. Arrastra al tocadiscos.`, false);
+            document.getElementById('shelfStatus').textContent = '✓ Vinilo fuera del empaque...';
         }
 
-        // ===== DRAG DEL DISCO FLOTANTE =====
+        // ===== DRAG DEL VINILO FLOTANTE =====
         function startDrag(e) {
             isDragging = true;
-            floatingDisk.classList.add('dragging');
-            floatingDisk.style.transition = 'none';
+            floatingVinyl.style.transition = 'none';
+            floatingVinyl.classList.add('dragging');
 
-            const rect = floatingDisk.getBoundingClientRect();
+            const rect = floatingVinyl.getBoundingClientRect();
             dragOffset.x = (e.clientX || e.touches[0].clientX) - rect.left;
             dragOffset.y = (e.clientY || e.touches[0].clientY) - rect.top;
 
@@ -519,116 +699,118 @@
         }
 
         function drag(e) {
-            if (!isDragging || !floatingDisk) return;
+            if (!isDragging || !floatingVinyl) return;
 
             const x = (e.clientX || e.touches[0].clientX) - dragOffset.x;
             const y = (e.clientY || e.touches[0].clientY) - dragOffset.y;
 
-            floatingDisk.style.left = x + 'px';
-            floatingDisk.style.top = y + 'px';
+            floatingVinyl.style.left = x + 'px';
+            floatingVinyl.style.top = y + 'px';
 
             checkDropZone(x, y);
         }
 
         function endDrag(e) {
             isDragging = false;
-            if (floatingDisk) floatingDisk.classList.remove('dragging');
+            if (floatingVinyl) floatingVinyl.classList.remove('dragging');
         }
 
-        // ===== DETECCIÓN DE ZONA DE DROP (TOCADISCOS) =====
+        // ===== DETECCIÓN DE ZONA DE DROP =====
         function checkDropZone(x, y) {
-            const turntable = document.getElementById('diskInPlayer');
+            const turntable = document.getElementById('vinyDisc');
             const rect = turntable.getBoundingClientRect();
 
-            const diskCenterX = x + 100;
-            const diskCenterY = y + 100;
+            const vinylCenterX = x + 90;
+            const vinylCenterY = y + 90;
             const turntableCenterX = rect.left + rect.width / 2;
             const turntableCenterY = rect.top + rect.height / 2;
 
             const distance = Math.sqrt(
-                Math.pow(diskCenterX - turntableCenterX, 2) +
-                Math.pow(diskCenterY - turntableCenterY, 2)
+                Math.pow(vinylCenterX - turntableCenterX, 2) +
+                Math.pow(vinylCenterY - turntableCenterY, 2)
             );
 
-            if (distance < 120) {
-                turntable.style.borderColor = '#4caf50';
-                turntable.style.boxShadow = 'inset 0 -5px 15px rgba(0, 0, 0, 0.8), 0 0 30px rgba(76, 175, 80, 0.6)';
+            if (distance < 100) {
+                turntable.style.boxShadow = 'inset 0 -3px 10px rgba(0, 0, 0, 0.8), 0 0 40px rgba(76, 175, 80, 0.7)';
+                turntable.style.transform = 'scale(1.05)';
             } else {
-                turntable.style.borderColor = '#222';
-                turntable.style.boxShadow = 'inset 0 -5px 15px rgba(0, 0, 0, 0.8)';
+                turntable.style.boxShadow = 'inset 0 -3px 10px rgba(0, 0, 0, 0.8), 0 0 20px rgba(0, 0, 0, 0.5)';
+                turntable.style.transform = 'scale(1)';
             }
         }
 
-        // Mejorar drop detection
+        // Drop detection mejorado
         document.addEventListener('mouseup', function(e) {
-            if (!isDragging || !floatingDisk || !currentAlbum) return;
+            if (!isDragging || !floatingVinyl || !currentAlbum) return;
 
-            const turntable = document.getElementById('diskInPlayer');
+            const turntable = document.getElementById('vinyDisc');
             const rect = turntable.getBoundingClientRect();
 
-            const diskRect = floatingDisk.getBoundingClientRect();
-            const diskCenterX = diskRect.left + diskRect.width / 2;
-            const diskCenterY = diskRect.top + diskRect.height / 2;
+            const vinylRect = floatingVinyl.getBoundingClientRect();
+            const vinylCenterX = vinylRect.left + vinylRect.width / 2;
+            const vinylCenterY = vinylRect.top + vinylRect.height / 2;
             const turntableCenterX = rect.left + rect.width / 2;
             const turntableCenterY = rect.top + rect.height / 2;
 
             const distance = Math.sqrt(
-                Math.pow(diskCenterX - turntableCenterX, 2) +
-                Math.pow(diskCenterY - turntableCenterY, 2)
+                Math.pow(vinylCenterX - turntableCenterX, 2) +
+                Math.pow(vinylCenterY - turntableCenterY, 2)
             );
 
-            if (distance < 120) {
-                placeRecordOnTurntable();
+            if (distance < 100) {
+                placeVinylOnTurntable();
             }
 
-            // Resetear color
-            turntable.style.borderColor = '#222';
-            turntable.style.boxShadow = 'inset 0 -5px 15px rgba(0, 0, 0, 0.8)';
+            turntable.style.boxShadow = 'inset 0 -3px 10px rgba(0, 0, 0, 0.8), 0 0 20px rgba(0, 0, 0, 0.5)';
+            turntable.style.transform = 'scale(1)';
         });
 
-        // ===== COLOCAR DISCO EN TOCADISCOS =====
-        function placeRecordOnTurntable() {
-            const diskInPlayer = document.getElementById('diskInPlayer');
-            const turntable = document.getElementById('turntable');
+        // ===== COLOCAR VINILO EN TOCADISCOS =====
+        function placeVinylOnTurntable() {
+            const vinyDisc = document.getElementById('vinyDisc');
+            const vinylCover = vinyDisc.querySelector('.vinyl-cover');
 
-            // Animar disco flotante al tocadiscos
-            floatingDisk.style.transition = 'all 0.8s ease';
-            floatingDisk.style.left = window.innerWidth / 2 - 130 + 'px';
-            floatingDisk.style.top = window.innerHeight / 2 - 140 + 'px';
-            floatingDisk.style.opacity = '0';
+            // Animar vinilo flotante al tocadiscos
+            floatingVinyl.style.transition = 'all 0.6s ease';
+            floatingVinyl.style.left = window.innerWidth / 2 - 90 + 'px';
+            floatingVinyl.style.top = window.innerHeight / 2 - 90 + 'px';
+            floatingVinyl.style.opacity = '0';
+            floatingVinyl.style.transform = 'scale(0.8)';
 
             setTimeout(() => {
-                // Mostrar disco en el tocadiscos
-                diskInPlayer.style.backgroundImage = `url('${currentAlbum.cover}')`;
-                diskInPlayer.style.backgroundSize = 'cover';
-                diskInPlayer.style.backgroundPosition = 'center';
+                // Mostrar vinilo en el tocadiscos
+                vinylCover.style.backgroundImage = `url('${currentAlbum.disc}')`;
 
-                // Remover disco flotante
-                if (floatingDisk) {
-                    floatingDisk.remove();
-                    floatingDisk = null;
+                // Remover vinilo flotante
+                if (floatingVinyl) {
+                    floatingVinyl.remove();
+                    floatingVinyl = null;
                 }
 
-                // Actualizar info
-                updateInfo(`✓ "${currentAlbum.name}" colocado en el tocadiscos. Presiona REPRODUCIR.`, true);
-                document.getElementById('shelfStatus').textContent = '✓ Disco en el tocadiscos';
+                vinyDisc.classList.add('with-cover');
 
-                // Habilitar botones
-                document.getElementById('playBtn').disabled = false;
+                // Actualizar info
+                if (currentAlbum.audioUrl) {
+                    updateInfo(`✓ "${currentAlbum.name}" en el tocadiscos. ¡Presiona REPRODUCIR!`, true);
+                    document.getElementById('playBtn').disabled = false;
+                } else {
+                    updateInfo(`⚠ "${currentAlbum.name}" no tiene audio configurado`, false, true);
+                    document.getElementById('playBtn').disabled = true;
+                }
+
+                document.getElementById('shelfStatus').textContent = '✓ Listo para reproducir';
 
                 // Posicionar brazo en reposo
                 const tonearm = document.getElementById('tonearm');
                 tonearm.classList.remove('playing');
                 tonearm.classList.add('in-rest');
-            }, 800);
+            }, 600);
         }
 
-        // ===== REPRODUCIR DISCO =====
+        // ===== REPRODUCIR VINILO =====
         function playRecord() {
-            if (!currentAlbum) return;
-
-            if (!currentAlbum.audio) {
-                updateInfo('⚠ No hay audio configurado para este álbum');
+            if (!currentAlbum || !currentAlbum.audioUrl) {
+                updateInfo('⚠ No hay audio configurado', false, true);
                 return;
             }
 
@@ -637,33 +819,35 @@
             const playBtn = document.getElementById('playBtn');
             const stopBtn = document.getElementById('stopBtn');
 
-            // Fase 1: Levantar brazo (0.3s)
+            // Fase 1: Brazo se acerca (0.4s)
             tonearm.classList.remove('in-rest');
             setTimeout(() => {
-                // Fase 2: Mover brazo hacia el disco (0.3s)
+                // Fase 2: Brazose coloca (0.3s)
                 tonearm.classList.add('playing');
                 
-                // Fase 3: Empezar a reproducir después
                 setTimeout(() => {
-                    // Empezar a girar lentamente
+                    // Fase 3: Plato empieza a girar lentamente
                     turntable.classList.add('spinning');
 
-                    // Acelerar progresivamente
+                    // Acelerar progresivamente (1.5s)
                     let speed = 0;
                     const speedInterval = setInterval(() => {
-                        speed += 0.15;
+                        speed += 0.2;
                         if (speed >= 1) {
                             clearInterval(speedInterval);
                             turntable.classList.remove('spinning');
                             turntable.classList.add('spinning', 'fast');
                         } else {
-                            turntable.style.animationDuration = (3 - speed * 2) + 's';
+                            turntable.style.animationDuration = (3 - speed * 2.2) + 's';
                         }
                     }, 100);
 
                     // Reproducir audio
-                    audioPlayer.src = currentAlbum.audio;
-                    audioPlayer.play();
+                    audioPlayer.src = currentAlbum.audioUrl;
+                    audioPlayer.play().catch(err => {
+                        updateInfo('⚠ Error al reproducir audio: ' + err.message, false, true);
+                        stopRecord();
+                    });
                     isPlaying = true;
 
                     // Actualizar botones
@@ -673,16 +857,16 @@
                     updateInfo(`♫ Reproduciendo "${currentAlbum.name}"...`, true);
                     document.getElementById('shelfStatus').textContent = '♫ Tocando...';
 
-                    // Detectar fin de la canción
-                    audioPlayer.addEventListener('ended', stopRecord);
+                    // Detectar fin
+                    audioPlayer.onended = stopRecord;
 
                 }, 300);
-            }, 300);
+            }, 400);
         }
 
-        // ===== DETENER DISCO =====
+        // ===== DETENER VINILO =====
         function stopRecord() {
-            if (!isPlaying) return;
+            if (!isPlaying && audioPlayer.currentTime === 0) return;
 
             const tonearm = document.getElementById('tonearm');
             const turntable = document.getElementById('turntable');
@@ -693,20 +877,20 @@
             audioPlayer.currentTime = 0;
             isPlaying = false;
 
-            // Desacelerar
+            // Desacelerar plato
             let speed = 1;
             const speedInterval = setInterval(() => {
-                speed -= 0.15;
+                speed -= 0.2;
                 if (speed <= 0) {
                     clearInterval(speedInterval);
                     turntable.classList.remove('spinning', 'fast');
                     turntable.style.animationDuration = '3s';
                     
-                    // Levantar brazo
+                    // Brazo vuelve a reposo
                     tonearm.classList.remove('playing');
                     tonearm.classList.add('in-rest');
                 } else {
-                    turntable.style.animationDuration = (3 - speed * 2) + 's';
+                    turntable.style.animationDuration = (3 - speed * 2.2) + 's';
                 }
             }, 100);
 
@@ -714,21 +898,23 @@
             playBtn.disabled = false;
             stopBtn.disabled = true;
 
-            updateInfo(`✓ Reproducción detenida. Presiona REPRODUCIR para continuar.`, true);
+            updateInfo(`✓ Reproducción completada.`, true);
             document.getElementById('shelfStatus').textContent = '⏹ Detenido';
         }
 
         // ===== UTILIDADES =====
         function setupAudioPlayer() {
             audioPlayer.addEventListener('play', () => {
-                console.log('Reproduciendo:', currentAlbum.name);
+                console.log('Reproduciendo:', currentAlbum?.name);
             });
         }
 
-        function updateInfo(message, isSuccess = false) {
+        function updateInfo(message, isSuccess = false, isWarning = false) {
             const infoBox = document.getElementById('infoBox');
             infoBox.textContent = message;
-            infoBox.className = isSuccess ? 'info-box success' : 'info-box';
+            infoBox.className = 'info-box';
+            if (isSuccess) infoBox.classList.add('success');
+            if (isWarning) infoBox.classList.add('warning');
         }
 
         // Iniciar
