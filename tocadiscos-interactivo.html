@@ -430,35 +430,6 @@
             display: none;
         }
 
-        /* Instrucciones */
-        .instructions {
-            background: rgba(255, 193, 7, 0.1);
-            border: 2px solid #ffc107;
-            padding: 15px;
-            border-radius: 8px;
-            color: #ffc107;
-            font-size: 12px;
-            margin-top: 20px;
-            line-height: 1.6;
-        }
-
-        .instructions-title {
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-
-        .code-block {
-            background: rgba(0, 0, 0, 0.3);
-            border-left: 3px solid #ffc107;
-            padding: 10px;
-            margin-top: 10px;
-            border-radius: 4px;
-            font-family: 'Courier New', monospace;
-            font-size: 11px;
-            overflow-x: auto;
-            color: #4caf50;
-        }
-
         /* Responsive */
         @media (max-width: 1024px) {
             .main-container {
@@ -548,24 +519,6 @@
                 <div class="info-box" id="infoBox">
                     👆 Selecciona un vinilo de la colección
                 </div>
-
-                <div class="instructions">
-                    <div class="instructions-title">📝 Cómo agregar audios:</div>
-                    
-                    1. Abre este archivo en un editor de texto<br>
-                    2. Busca la sección "// ===== CONFIGURACIÓN DE ÁLBUMES =====" (línea ~200)<br>
-                    3. En cada álbum, reemplaza el valor de "audioUrl" con:<br>
-                    
-                    <div class="code-block">
-// Opción A: URL online<br>
-audioUrl: 'https://ejemplo.com/mi-cancion.mp3'<br>
-<br>
-// Opción B: Archivo local (sube a GitHub)<br>
-// Crea carpeta 'audios' en tu repo<br>
-// Sube archivos .mp3 ahí<br>
-// Luego usa: 'audios/cancion.mp3'
-                    </div>
-                </div>
             </div>
         </div>
     </div>
@@ -580,25 +533,25 @@ audioUrl: 'https://ejemplo.com/mi-cancion.mp3'<br>
                 id: 1,
                 name: 'Álbum 1',
                 size: 'medium',
-                cover: 'https://i.imgur.com/TCvjeJA.png',    // Portada del empaque
-                disc: 'https://i.imgur.com/udPqNSz.png',     // Imagen del vinilo
-                audioUrl: ''  // ← AQUÍ VA TU AUDIO
+                cover: 'https://i.imgur.com/TCvjeJA.png',
+                disc: 'https://i.imgur.com/udPqNSz.png',
+                audioUrl: 'https://drive.google.com/uc?export=download&id=1BMwF4kxXfYaWfLB5NffGGVgHKqrUwZjV'
             },
             {
                 id: 2,
                 name: 'Álbum 2',
                 size: 'large',
-                cover: 'https://i.imgur.com/j0lv7Jl.png',    // Portada del empaque
-                disc: 'https://i.imgur.com/4A6WSum.png',     // Imagen del vinilo
-                audioUrl: ''  // ← AQUÍ VA TU AUDIO
+                cover: 'https://i.imgur.com/j0lv7Jl.png',
+                disc: 'https://i.imgur.com/4A6WSum.png',
+                audioUrl: 'https://drive.google.com/uc?export=download&id=1UGFtrGY75hQmMVtcXY-vYsi3IcervwTk'
             },
             {
                 id: 3,
                 name: 'Álbum 3',
                 size: 'small',
-                cover: 'https://i.imgur.com/6fE8pKV.png',    // Portada del empaque
-                disc: 'https://i.imgur.com/STxSUdH.jpeg',    // Imagen del vinilo
-                audioUrl: ''  // ← AQUÍ VA TU AUDIO
+                cover: 'https://i.imgur.com/6fE8pKV.png',
+                disc: 'https://i.imgur.com/STxSUdH.jpeg',
+                audioUrl: 'https://drive.google.com/uc?export=download&id=17b24J45Do7fwJpQ42pvEqX_0-NeyN4b9'
             }
         ];
 
@@ -822,7 +775,7 @@ audioUrl: 'https://ejemplo.com/mi-cancion.mp3'<br>
             // Fase 1: Brazo se acerca (0.4s)
             tonearm.classList.remove('in-rest');
             setTimeout(() => {
-                // Fase 2: Brazose coloca (0.3s)
+                // Fase 2: Brazo se coloca (0.3s)
                 tonearm.classList.add('playing');
                 
                 setTimeout(() => {
