@@ -112,10 +112,14 @@
 
         .album-label {
             color: #e94560;
-            font-size: 12px;
+            font-size: 11px;
             text-align: center;
             margin-top: 8px;
             font-weight: bold;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         /* ===== TOCADISCOS ===== */
@@ -274,15 +278,32 @@
             transform: rotate(-5deg);
         }
 
+        /* Aguja realista */
         .stylus {
             position: absolute;
-            width: 6px;
-            height: 25px;
-            background: linear-gradient(to bottom, #ffcc00, #ff9900);
-            bottom: -15px;
-            left: 5px;
-            border-radius: 3px;
-            box-shadow: 0 2px 8px rgba(255, 200, 0, 0.6);
+            width: 3px;
+            height: 35px;
+            background: linear-gradient(to bottom, #ffdd00 0%, #ffbb00 50%, #ff8800 100%);
+            bottom: -20px;
+            left: 6.5px;
+            border-radius: 50%;
+            box-shadow: 0 0 6px rgba(255, 200, 0, 0.8), 
+                        0 2px 10px rgba(255, 150, 0, 0.6),
+                        inset 0 1px 2px rgba(255, 255, 255, 0.4);
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
+        }
+
+        /* Punta de la aguja */
+        .stylus::after {
+            content: '';
+            position: absolute;
+            width: 2px;
+            height: 8px;
+            background: linear-gradient(to bottom, #ffdd00, #ff6600);
+            bottom: -6px;
+            left: 0.5px;
+            border-radius: 50%;
+            box-shadow: 0 1px 3px rgba(255, 100, 0, 0.8);
         }
 
         /* Vinilo flotante animado */
@@ -506,7 +527,7 @@
     </div>
 
     <!-- Audio player -->
-    <audio id="audioPlayer"></audio>
+    <audio id="audioPlayer" crossOrigin="anonymous"></audio>
 
     <script>
         // ===== CONFIGURACIÓN DE ÁLBUMES =====
@@ -514,7 +535,6 @@
             {
                 id: 1,
                 name: 'This Music May Contain Hope',
-                artist: 'Raye',
                 size: 'medium',
                 cover: 'https://i.imgur.com/TCvjeJA.png',
                 disc: 'https://i.imgur.com/udPqNSz.png',
@@ -524,7 +544,6 @@
             {
                 id: 2,
                 name: 'The Romantic',
-                artist: 'Bruno Mars',
                 size: 'large',
                 cover: 'https://i.imgur.com/STxSUdH.jpeg',
                 disc: 'https://i.imgur.com/j0lv7Jl.png',
@@ -534,7 +553,6 @@
             {
                 id: 3,
                 name: 'The Art of Loving',
-                artist: 'Olivia Dean',
                 size: 'small',
                 cover: 'https://i.imgur.com/4A6WSum.png',
                 disc: 'https://i.imgur.com/6fE8pKV.png',
@@ -570,7 +588,7 @@
                     <div class="album-package">
                         <img src="${album.cover}" alt="${album.name}" loading="lazy">
                     </div>
-                    <div class="album-label">${album.artist}</div>
+                    <div class="album-label">${album.name}</div>
                 `;
                 albumDiv.onclick = () => selectAlbum(album, albumDiv);
                 display.appendChild(albumDiv);
@@ -781,34 +799,24 @@
                         }
                     }, 100);
 
-                    // Crear blob URL para reproducción cross-origin
-                    fetch(currentAlbum.audioUrl)
-                        .then(response => response.blob())
-                        .then(blob => {
-                            const url = URL.createObjectURL(blob);
-                            audioPlayer.src = url;
-                            audioPlayer.play().then(() => {
-                                isPlaying = true;
-                                // Detectar fin
-                                audioPlayer.onended = stopRecord;
-                            }).catch(err => {
-                                console.error('Error:', err);
-                                updateInfo('⚠ Error al reproducir audio', false, true);
-                                stopRecord();
-                            });
-                        })
-                        .catch(err => {
-                            console.error('Error:', err);
-                            updateInfo('⚠ Error al cargar el audio', false, true);
-                            stopRecord();
-                        });
+                    // Reproducir audio directamente
+                    audioPlayer.src = currentAlbum.audioUrl;
+                    audioPlayer.play().then(() => {
+                        isPlaying = true;
+                        updateInfo(`♫ Reproduciendo "${currentAlbum.song}" de ${currentAlbum.name}...`, true);
+                        document.getElementById('shelfStatus').textContent = '♫ Tocando...';
+                    }).catch(err => {
+                        console.error('Error al reproducir:', err);
+                        updateInfo('⚠ Error al reproducir: ' + err.message, false, true);
+                        stopRecord();
+                    });
 
                     // Actualizar botones
                     playBtn.disabled = true;
                     stopBtn.disabled = false;
 
-                    updateInfo(`♫ Reproduciendo "${currentAlbum.song}" de ${currentAlbum.name}...`, true);
-                    document.getElementById('shelfStatus').textContent = '♫ Tocando...';
+                    // Detectar fin
+                    audioPlayer.onended = stopRecord;
 
                 }, 300);
             }, 400);
