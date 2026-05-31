@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tocadiscos Interactivo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        .main-container {
+            display: flex;
+            gap: 40px;
+            align-items: center;
+            flex-wrap: wrap;
+            justify-content: center;
+            max-width: 1200px;
+        }
+
+        /* ===== ESTANTERÍA DE ÁLBUMES ===== */
+        .album-shelf {
+            background: linear-gradient(135deg, #0f3460 0%, #16213e 100%);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            border: 2px solid #e94560;
+            min-width: 350px;
+        }
+
+        .shelf-title {
+            color: #e94560;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 30px;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .albums-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+
+        .album-cover {
+            width: 100%;
+            aspect-ratio: 1;
+            cursor: pointer;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            border: 3px solid transparent;
+        }
+
+        .album-cover:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(233, 69, 96, 0.5);
+            border-color: #e94560;
+        }
+
+        .album-cover img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* ===== TOCADISCOS ===== */
+        .turntable-section {
+            background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.8);
+            border: 3px solid #333;
+            min-width: 450px;
+            position: relative;
+        }
+
+        .turntable-base {
+            background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: inset 0 5px 15px rgba(0, 0, 0, 0.8);
+        }
+
+        .record-player {
+            position: relative;
+            width: 300px;
+            height: 300px;
+            margin: 0 auto 30px;
+        }
+
+        /* Plato del tocadiscos */
+        .turntable-plate {
+            position: absolute;
+            width: 280px;
+            height: 280px;
+            top: 10px;
+            left: 10px;
+            background: radial-gradient(circle at 30% 30%, #4a4a4a, #0a0a0a);
+            border-radius: 50%;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.9), inset 0 -5px 15px rgba(0, 0, 0, 0.8);
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .turntable-plate.spinning {
+            animation: spin 3s linear infinite;
+        }
+
+        .turntable-plate.spinning.fast {
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .disk-in-player {
+            width: 260px;
+            height: 260px;
+            border-radius: 50%;
+            box-shadow: inset 0 -5px 15px rgba(0, 0, 0, 0.8);
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 3px solid #222;
+        }
+
+        .disk-center {
+            width: 40px;
+            height: 40px;
+            background: radial-gradient(circle at 30% 30%, #888, #222);
+            border-radius: 50%;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.8);
+        }
+
+        /* Brazo del tocadiscos */
+        .tonearm {
+            position: absolute;
+            width: 20px;
+            height: 200px;
+            background: linear-gradient(135deg, #333, #111);
+            bottom: -50px;
+            right: -50px;
+            transform-origin: bottom right;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.8);
+            transition: transform 0.6s ease;
+            z-index: 10;
+        }
+
+        .tonearm.in-rest {
+            transform: rotate(-45deg);
+        }
+
+        .tonearm.playing {
+            transform: rotate(0deg);
+        }
+
+        .stylus {
+            position: absolute;
+            width: 8px;
+            height: 30px;
+            background: linear-gradient(to bottom, #ffcc00, #ff9900);
+            bottom: -20px;
+            right: 6px;
+            border-radius: 4px;
+            box-shadow: 0 2px 8px rgba(255, 200, 0, 0.6);
+        }
+
+        /* Floración del disco */
+        .floating-disk {
+            position: fixed;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            cursor: grab;
+            z-index: 100;
+            filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.8));
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .floating-disk.dragging {
+            animation: none;
+            cursor: grabbing;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px) rotateZ(0deg);
+            }
+            50% {
+                transform: translateY(-20px) rotateZ(10deg);
+            }
+        }
+
+        .floating-disk-img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background-size: cover;
+            background-position: center;
+            border: 4px solid #e94560;
+            box-shadow: 0 5px 20px rgba(233, 69, 96, 0.6);
+        }
+
+        /* Controles */
+        .controls {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            font-size: 14px;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn-play {
+            background: linear-gradient(135deg, #e94560 0%, #c1213d 100%);
+            color: white;
+        }
+
+        .btn-play:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(233, 69, 96, 0.6);
+        }
+
+        .btn-play:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .btn-stop {
+            background: linear-gradient(135deg, #666 0%, #333 100%);
+            color: white;
+        }
+
+        .btn-stop:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(100, 100, 100, 0.6);
+        }
+
+        .btn-stop:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Info */
+        .info-box {
+            background: rgba(233, 69, 96, 0.1);
+            border: 2px solid #e94560;
+            padding: 15px;
+            border-radius: 8px;
+            color: #e94560;
+            text-align: center;
+            font-size: 14px;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .info-box.success {
+            background: rgba(76, 175, 80, 0.1);
+            border-color: #4caf50;
+            color: #4caf50;
+        }
+
+        /* Audio player oculto */
+        audio {
+            display: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .main-container {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .turntable-section {
+                min-width: 350px;
+            }
+
+            .album-shelf {
+                min-width: 300px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .album-shelf {
+                padding: 20px;
+            }
+
+            .turntable-section {
+                padding: 20px;
+                min-width: auto;
+            }
+
+            .record-player {
+                width: 250px;
+                height: 250px;
+            }
+
+            .turntable-plate {
+                width: 230px;
+                height: 230px;
+                top: 10px;
+                left: 10px;
+            }
+
+            .disk-in-player {
+                width: 210px;
+                height: 210px;
+            }
+
+            .albums-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .status-message {
+            color: #ffcc00;
+            font-size: 12px;
+            margin-top: 10px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <!-- ESTANTERÍA DE ÁLBUMES -->
+        <div class="album-shelf">
+            <div class="shelf-title">Mis Álbumes</div>
+            <div class="albums-grid" id="albumsGrid"></div>
+            <div class="status-message" id="shelfStatus">Selecciona un álbum para comenzar</div>
+        </div>
+
+        <!-- TOCADISCOS -->
+        <div class="turntable-section">
+            <div class="turntable-base">
+                <div class="record-player">
+                    <div class="turntable-plate" id="turntable">
+                        <div class="disk-in-player" id="diskInPlayer">
+                            <div class="disk-center"></div>
+                        </div>
+                    </div>
+                    <div class="tonearm in-rest" id="tonearm">
+                        <div class="stylus"></div>
+                    </div>
+                </div>
+
+                <div class="controls">
+                    <button class="btn btn-play" id="playBtn" onclick="playRecord()" disabled>▶ Reproducir</button>
+                    <button class="btn btn-stop" id="stopBtn" onclick="stopRecord()" disabled>⏹ Detener</button>
+                </div>
+
+                <div class="info-box" id="infoBox">
+                    👆 Selecciona un álbum de la estantería
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Audio Player -->
+    <audio id="audioPlayer"></audio>
+
+    <script>
+        // ===== CONFIGURACIÓN DE ÁLBUMES =====
+        const albums = [
+            {
+                id: 1,
+                name: 'Álbum 1',
+                cover: 'https://i.imgur.com/TCvjeJA.png',
+                audio: '' // ← AGREGA LA URL DEL AUDIO AQUÍ
+            },
+            {
+                id: 2,
+                name: 'Álbum 2',
+                cover: 'https://i.imgur.com/j0lv7Jl.png',
+                audio: '' // ← AGREGA LA URL DEL AUDIO AQUÍ
+            },
+            {
+                id: 3,
+                name: 'Álbum 3',
+                cover: 'https://i.imgur.com/6fE8pKV.png',
+                audio: '' // ← AGREGA LA URL DEL AUDIO AQUÍ
+            },
+            {
+                id: 4,
+                name: 'Álbum 4',
+                cover: 'https://i.imgur.com/udPqNSz.png',
+                audio: '' // ← AGREGA LA URL DEL AUDIO AQUÍ
+            },
+            {
+                id: 5,
+                name: 'Álbum 5',
+                cover: 'https://i.imgur.com/4A6WSum.png',
+                audio: '' // ← AGREGA LA URL DEL AUDIO AQUÍ
+            },
+            {
+                id: 6,
+                name: 'Álbum 6',
+                cover: 'https://i.imgur.com/STxSUdH.jpeg',
+                audio: '' // ← AGREGA LA URL DEL AUDIO AQUÍ
+            }
+        ];
+
+        // ===== VARIABLES DE ESTADO =====
+        let currentAlbum = null;
+        let floatingDisk = null;
+        let isDragging = false;
+        let dragOffset = { x: 0, y: 0 };
+        let isPlaying = false;
+        let audioPlayer = document.getElementById('audioPlayer');
+
+        // ===== INICIALIZACIÓN =====
+        function init() {
+            renderAlbums();
+            setupAudioPlayer();
+        }
+
+        // ===== RENDERIZAR ÁLBUMES EN LA ESTANTERÍA =====
+        function renderAlbums() {
+            const grid = document.getElementById('albumsGrid');
+            grid.innerHTML = '';
+
+            albums.forEach((album, index) => {
+                const albumDiv = document.createElement('div');
+                albumDiv.className = 'album-cover';
+                albumDiv.innerHTML = `<img src="${album.cover}" alt="${album.name}" loading="lazy">`;
+                albumDiv.onclick = () => selectAlbum(album, albumDiv);
+                grid.appendChild(albumDiv);
+            });
+        }
+
+        // ===== SELECCIONAR ÁLBUM (HACER FLOTAR) =====
+        function selectAlbum(album, element) {
+            if (!floatingDisk) {
+                // Crear disco flotante
+                floatingDisk = document.createElement('div');
+                floatingDisk.className = 'floating-disk';
+                floatingDisk.innerHTML = `<div class="floating-disk-img" style="background-image: url('${album.cover}')"></div>`;
+                document.body.appendChild(floatingDisk);
+
+                // Posicionar en el centro de la pantalla
+                const rect = element.getBoundingClientRect();
+                floatingDisk.style.left = rect.left + 'px';
+                floatingDisk.style.top = rect.top + 'px';
+
+                // Animar al centro
+                setTimeout(() => {
+                    floatingDisk.style.transition = 'all 0.6s ease';
+                    floatingDisk.style.left = window.innerWidth / 2 - 100 + 'px';
+                    floatingDisk.style.top = window.innerHeight / 2 - 100 + 'px';
+                }, 10);
+
+                // Hacer draggable
+                floatingDisk.addEventListener('mousedown', startDrag);
+                floatingDisk.addEventListener('touchstart', startDrag);
+
+                currentAlbum = album;
+                updateInfo(`"${album.name}" flotando. Arrastra al tocadiscos para colocarlo.`);
+                document.getElementById('shelfStatus').textContent = '✓ Disco flotando...';
+            }
+        }
+
+        // ===== DRAG DEL DISCO FLOTANTE =====
+        function startDrag(e) {
+            isDragging = true;
+            floatingDisk.classList.add('dragging');
+            floatingDisk.style.transition = 'none';
+
+            const rect = floatingDisk.getBoundingClientRect();
+            dragOffset.x = (e.clientX || e.touches[0].clientX) - rect.left;
+            dragOffset.y = (e.clientY || e.touches[0].clientY) - rect.top;
+
+            document.addEventListener('mousemove', drag);
+            document.addEventListener('touchmove', drag);
+            document.addEventListener('mouseup', endDrag);
+            document.addEventListener('touchend', endDrag);
+        }
+
+        function drag(e) {
+            if (!isDragging || !floatingDisk) return;
+
+            const x = (e.clientX || e.touches[0].clientX) - dragOffset.x;
+            const y = (e.clientY || e.touches[0].clientY) - dragOffset.y;
+
+            floatingDisk.style.left = x + 'px';
+            floatingDisk.style.top = y + 'px';
+
+            checkDropZone(x, y);
+        }
+
+        function endDrag(e) {
+            isDragging = false;
+            if (floatingDisk) floatingDisk.classList.remove('dragging');
+        }
+
+        // ===== DETECCIÓN DE ZONA DE DROP (TOCADISCOS) =====
+        function checkDropZone(x, y) {
+            const turntable = document.getElementById('diskInPlayer');
+            const rect = turntable.getBoundingClientRect();
+
+            const diskCenterX = x + 100;
+            const diskCenterY = y + 100;
+            const turntableCenterX = rect.left + rect.width / 2;
+            const turntableCenterY = rect.top + rect.height / 2;
+
+            const distance = Math.sqrt(
+                Math.pow(diskCenterX - turntableCenterX, 2) +
+                Math.pow(diskCenterY - turntableCenterY, 2)
+            );
+
+            if (distance < 120) {
+                turntable.style.borderColor = '#4caf50';
+                turntable.style.boxShadow = 'inset 0 -5px 15px rgba(0, 0, 0, 0.8), 0 0 30px rgba(76, 175, 80, 0.6)';
+            } else {
+                turntable.style.borderColor = '#222';
+                turntable.style.boxShadow = 'inset 0 -5px 15px rgba(0, 0, 0, 0.8)';
+            }
+        }
+
+        // Mejorar drop detection
+        document.addEventListener('mouseup', function(e) {
+            if (!isDragging || !floatingDisk || !currentAlbum) return;
+
+            const turntable = document.getElementById('diskInPlayer');
+            const rect = turntable.getBoundingClientRect();
+
+            const diskRect = floatingDisk.getBoundingClientRect();
+            const diskCenterX = diskRect.left + diskRect.width / 2;
+            const diskCenterY = diskRect.top + diskRect.height / 2;
+            const turntableCenterX = rect.left + rect.width / 2;
+            const turntableCenterY = rect.top + rect.height / 2;
+
+            const distance = Math.sqrt(
+                Math.pow(diskCenterX - turntableCenterX, 2) +
+                Math.pow(diskCenterY - turntableCenterY, 2)
+            );
+
+            if (distance < 120) {
+                placeRecordOnTurntable();
+            }
+
+            // Resetear color
+            turntable.style.borderColor = '#222';
+            turntable.style.boxShadow = 'inset 0 -5px 15px rgba(0, 0, 0, 0.8)';
+        });
+
+        // ===== COLOCAR DISCO EN TOCADISCOS =====
+        function placeRecordOnTurntable() {
+            const diskInPlayer = document.getElementById('diskInPlayer');
+            const turntable = document.getElementById('turntable');
+
+            // Animar disco flotante al tocadiscos
+            floatingDisk.style.transition = 'all 0.8s ease';
+            floatingDisk.style.left = window.innerWidth / 2 - 130 + 'px';
+            floatingDisk.style.top = window.innerHeight / 2 - 140 + 'px';
+            floatingDisk.style.opacity = '0';
+
+            setTimeout(() => {
+                // Mostrar disco en el tocadiscos
+                diskInPlayer.style.backgroundImage = `url('${currentAlbum.cover}')`;
+                diskInPlayer.style.backgroundSize = 'cover';
+                diskInPlayer.style.backgroundPosition = 'center';
+
+                // Remover disco flotante
+                if (floatingDisk) {
+                    floatingDisk.remove();
+                    floatingDisk = null;
+                }
+
+                // Actualizar info
+                updateInfo(`✓ "${currentAlbum.name}" colocado en el tocadiscos. Presiona REPRODUCIR.`, true);
+                document.getElementById('shelfStatus').textContent = '✓ Disco en el tocadiscos';
+
+                // Habilitar botones
+                document.getElementById('playBtn').disabled = false;
+
+                // Posicionar brazo en reposo
+                const tonearm = document.getElementById('tonearm');
+                tonearm.classList.remove('playing');
+                tonearm.classList.add('in-rest');
+            }, 800);
+        }
+
+        // ===== REPRODUCIR DISCO =====
+        function playRecord() {
+            if (!currentAlbum) return;
+
+            if (!currentAlbum.audio) {
+                updateInfo('⚠ No hay audio configurado para este álbum');
+                return;
+            }
+
+            const tonearm = document.getElementById('tonearm');
+            const turntable = document.getElementById('turntable');
+            const playBtn = document.getElementById('playBtn');
+            const stopBtn = document.getElementById('stopBtn');
+
+            // Fase 1: Levantar brazo (0.3s)
+            tonearm.classList.remove('in-rest');
+            setTimeout(() => {
+                // Fase 2: Mover brazo hacia el disco (0.3s)
+                tonearm.classList.add('playing');
+                
+                // Fase 3: Empezar a reproducir después
+                setTimeout(() => {
+                    // Empezar a girar lentamente
+                    turntable.classList.add('spinning');
+
+                    // Acelerar progresivamente
+                    let speed = 0;
+                    const speedInterval = setInterval(() => {
+                        speed += 0.15;
+                        if (speed >= 1) {
+                            clearInterval(speedInterval);
+                            turntable.classList.remove('spinning');
+                            turntable.classList.add('spinning', 'fast');
+                        } else {
+                            turntable.style.animationDuration = (3 - speed * 2) + 's';
+                        }
+                    }, 100);
+
+                    // Reproducir audio
+                    audioPlayer.src = currentAlbum.audio;
+                    audioPlayer.play();
+                    isPlaying = true;
+
+                    // Actualizar botones
+                    playBtn.disabled = true;
+                    stopBtn.disabled = false;
+
+                    updateInfo(`♫ Reproduciendo "${currentAlbum.name}"...`, true);
+                    document.getElementById('shelfStatus').textContent = '♫ Tocando...';
+
+                    // Detectar fin de la canción
+                    audioPlayer.addEventListener('ended', stopRecord);
+
+                }, 300);
+            }, 300);
+        }
+
+        // ===== DETENER DISCO =====
+        function stopRecord() {
+            if (!isPlaying) return;
+
+            const tonearm = document.getElementById('tonearm');
+            const turntable = document.getElementById('turntable');
+            const playBtn = document.getElementById('playBtn');
+            const stopBtn = document.getElementById('stopBtn');
+
+            audioPlayer.pause();
+            audioPlayer.currentTime = 0;
+            isPlaying = false;
+
+            // Desacelerar
+            let speed = 1;
+            const speedInterval = setInterval(() => {
+                speed -= 0.15;
+                if (speed <= 0) {
+                    clearInterval(speedInterval);
+                    turntable.classList.remove('spinning', 'fast');
+                    turntable.style.animationDuration = '3s';
+                    
+                    // Levantar brazo
+                    tonearm.classList.remove('playing');
+                    tonearm.classList.add('in-rest');
+                } else {
+                    turntable.style.animationDuration = (3 - speed * 2) + 's';
+                }
+            }, 100);
+
+            // Actualizar botones
+            playBtn.disabled = false;
+            stopBtn.disabled = true;
+
+            updateInfo(`✓ Reproducción detenida. Presiona REPRODUCIR para continuar.`, true);
+            document.getElementById('shelfStatus').textContent = '⏹ Detenido';
+        }
+
+        // ===== UTILIDADES =====
+        function setupAudioPlayer() {
+            audioPlayer.addEventListener('play', () => {
+                console.log('Reproduciendo:', currentAlbum.name);
+            });
+        }
+
+        function updateInfo(message, isSuccess = false) {
+            const infoBox = document.getElementById('infoBox');
+            infoBox.textContent = message;
+            infoBox.className = isSuccess ? 'info-box success' : 'info-box';
+        }
+
+        // Iniciar
+        init();
+    </script>
+</body>
+</html>
