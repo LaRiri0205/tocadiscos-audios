@@ -88,20 +88,20 @@
             border-radius: 4px;
         }
 
-        /* Tamaños diferentes */
+        /* Tamaños en pixeles exactos */
         .album-item.size-small .album-package {
-            width: 120px;
-            height: 140px;
+            width: 110px;
+            height: 125px;
         }
 
         .album-item.size-medium .album-package {
-            width: 140px;
-            height: 160px;
+            width: 130px;
+            height: 150px;
         }
 
         .album-item.size-large .album-package {
-            width: 160px;
-            height: 180px;
+            width: 150px;
+            height: 175px;
         }
 
         .album-item.selected .album-package {
@@ -260,7 +260,7 @@
             position: absolute;
             width: 16px;
             height: 180px;
-            background: linear-gradient(135deg, #444, #222);
+            background: linear-gradient(135deg, #555, #222);
             bottom: 50px;
             right: 35px;
             transform-origin: bottom center;
@@ -278,32 +278,45 @@
             transform: rotate(-5deg);
         }
 
-        /* Aguja realista */
+        /* Aguja realista - Estilo retro brillante */
         .stylus {
             position: absolute;
-            width: 3px;
-            height: 35px;
-            background: linear-gradient(to bottom, #ffdd00 0%, #ffbb00 50%, #ff8800 100%);
-            bottom: -20px;
-            left: 6.5px;
+            width: 2px;
+            height: 40px;
+            background: linear-gradient(to bottom, 
+                #ffff99 0%,
+                #ffdd44 15%,
+                #ffbb00 35%,
+                #ff9900 60%,
+                #ff6600 85%,
+                #cc4400 100%);
+            bottom: -18px;
+            left: 7px;
             border-radius: 50%;
-            box-shadow: 0 0 6px rgba(255, 200, 0, 0.8), 
-                        0 2px 10px rgba(255, 150, 0, 0.6),
-                        inset 0 1px 2px rgba(255, 255, 255, 0.4);
-            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
+            box-shadow: 
+                0 0 8px rgba(255, 200, 0, 0.9),
+                0 0 15px rgba(255, 150, 0, 0.7),
+                0 2px 8px rgba(0, 0, 0, 0.6),
+                inset 0 1px 3px rgba(255, 255, 200, 0.6);
+            filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.8));
         }
 
-        /* Punta de la aguja */
+        /* Punta fina de la aguja */
         .stylus::after {
             content: '';
             position: absolute;
-            width: 2px;
-            height: 8px;
-            background: linear-gradient(to bottom, #ffdd00, #ff6600);
-            bottom: -6px;
+            width: 1px;
+            height: 10px;
+            background: linear-gradient(to bottom, 
+                #ffdd44 0%,
+                #ff8800 70%,
+                #cc3300 100%);
+            bottom: -10px;
             left: 0.5px;
             border-radius: 50%;
-            box-shadow: 0 1px 3px rgba(255, 100, 0, 0.8);
+            box-shadow: 
+                0 1px 4px rgba(255, 100, 0, 1),
+                0 0 6px rgba(255, 150, 0, 0.8);
         }
 
         /* Vinilo flotante animado */
@@ -539,7 +552,7 @@
                 cover: 'https://i.imgur.com/TCvjeJA.png',
                 disc: 'https://i.imgur.com/udPqNSz.png',
                 song: 'Nightingale Lane',
-                audioUrl: 'https://www.mediafire.com/file/rtdj4gsoszleaem/Nightingale_Lane..mp3/file'
+                audioUrl: 'https://www.mediafire.com/file/rtdj4gsoszleaem/Nightingale_Lane..mp3'
             },
             {
                 id: 2,
@@ -548,7 +561,7 @@
                 cover: 'https://i.imgur.com/STxSUdH.jpeg',
                 disc: 'https://i.imgur.com/j0lv7Jl.png',
                 song: 'Risk It All',
-                audioUrl: 'https://www.mediafire.com/file/cvi2vjcnkw36afs/Risk_It_All.mp3/file'
+                audioUrl: 'https://www.mediafire.com/file/cvi2vjcnkw36afs/Risk_It_All.mp3'
             },
             {
                 id: 3,
@@ -557,7 +570,7 @@
                 cover: 'https://i.imgur.com/4A6WSum.png',
                 disc: 'https://i.imgur.com/6fE8pKV.png',
                 song: 'Man I Need',
-                audioUrl: 'https://www.mediafire.com/file/54wdqv1s1laq6h5/Man_I_Need.mp3/file'
+                audioUrl: 'https://www.mediafire.com/file/54wdqv1s1laq6h5/Man_I_Need.mp3'
             }
         ];
 
@@ -799,7 +812,7 @@
                         }
                     }, 100);
 
-                    // Reproducir audio directamente
+                    // Reproducir audio
                     audioPlayer.src = currentAlbum.audioUrl;
                     audioPlayer.play().then(() => {
                         isPlaying = true;
@@ -807,7 +820,7 @@
                         document.getElementById('shelfStatus').textContent = '♫ Tocando...';
                     }).catch(err => {
                         console.error('Error al reproducir:', err);
-                        updateInfo('⚠ Error al reproducir: ' + err.message, false, true);
+                        updateInfo('⚠ Error de audio. Intenta de nuevo.', false, true);
                         stopRecord();
                     });
 
